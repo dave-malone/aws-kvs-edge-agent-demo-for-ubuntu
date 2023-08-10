@@ -50,7 +50,8 @@ echo "generating run.sh under $(pwd)/kvs-edge-agent"
 cat > ./kvs-edge-agent/run.sh <<EOF
 #!/bin/bash
 
-export KVS_EDGE_HOME=/kvs-edge-agent/KvsEdgeComponent/artifacts/aws.kinesisvideo.KvsEdgeComponent/1.1.0
+export KVS_EDGE_HOME=/kvs-edge-agent/KvsEdgeComponent
+export KVS_EDGE_COMPONENT=\$KVS_EDGE_HOME/artifacts/aws.kinesisvideo.KvsEdgeComponent/1.1.0
 
 export AWS_REGION=$AWS_DEFAULT_REGION
 export AWS_IOT_CORE_THING_NAME=`cat $(pwd)/iot/thing-name`
@@ -64,10 +65,10 @@ export AWS_IOT_CORE_PRIVATE_KEY=\$KVS_EDGE_HOME/iot/certs/device.private.key
 export AWS_IOT_CORE_CERT=\$KVS_EDGE_HOME/iot/certs/device.cert.pem
 export AWS_IOT_CA_CERT=\$KVS_EDGE_HOME/iot/certs/root-CA.crt
 
-export LD_LIBRARY_PATH=\$KVS_EDGE_HOME/lib:/usr/local/lib:/usr/local/lib64
-export GST_PLUGIN_PATH=\$KVS_EDGE_HOME
+export LD_LIBRARY_PATH=\$KVS_EDGE_COMPONENT/lib:/usr/local/lib:/usr/local/lib64
+export GST_PLUGIN_PATH=\$KVS_EDGE_COMPONENT
 
-pushd \$KVS_EDGE_HOME
+pushd \$KVS_EDGE_COMPONENT
 
 echo "pwd: " $(pwd)
 echo "LD_LIBRARY_PATH=\$LD_LIBRARY_PATH"
