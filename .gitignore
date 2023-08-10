@@ -4,3 +4,4 @@ iot/cmd-responses/
 iot/credential-provider-endpoint
 iot/role-alias
 iot/thing-name
+kvs-edge-agent/
