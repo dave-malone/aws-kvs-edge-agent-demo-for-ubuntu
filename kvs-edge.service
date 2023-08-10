@@ -1,0 +1,16 @@
+[Unit]
+Description=Amazon Kinesis Video Streams Edge Agent Demo Application
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi 
+ExecStart=/opt/amazon-kinesis-video-streams-webrtc-sdk-c/run-kvs-webrtc-client-master-sample.sh
+StandardOutput=append:/var/log/kvs-edge.log
+StandardError=append:/var/log/kvs-edge.log
+ 
+[Install]
+WantedBy=multi-user.target

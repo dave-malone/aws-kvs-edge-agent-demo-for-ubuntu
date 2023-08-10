@@ -1,0 +1,38 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Effect": "Allow",
+          "Action": [
+              "cloudwatch:PutMetricData",
+              "kinesisvideo:ListStreams",
+              "iot:Connect",
+              "iot:Publish",
+              "iot:Subscribe",
+              "iot:Receive"
+          ],
+          "Resource": [
+              "*"
+          ] 
+      },
+      {
+          "Effect": "Allow",
+          "Action": [
+              "kinesisvideo:DescribeStream",
+              "kinesisvideo:PutMedia",
+              "kinesisvideo:TagStream",
+              "kinesisvideo:GetDataEndpoint"
+          ],
+           "Resource": [ 
+              "arn:aws:kinesisvideo:*:*:stream/*/*"
+          ]
+      },
+      {
+          "Effect": "Allow",
+          "Action": "secretsmanager:GetSecretValue",
+          "Resource": [
+               "arn:aws:secretsmanager:*:*:secret:*"
+          ]
+      }
+  ]
+}
