@@ -6,6 +6,6 @@ rm /etc/systemd/system/kvs-edge.service
 systemctl daemon-reload
 systemctl reset-failed
 
-rm -rf /opt/amazon-kinesis-video-streams-edge-sdk-c
+rm -rf /opt/kvs-edge-agent
 
 # uninstall AWS resources?
