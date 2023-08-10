@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=pi 
-ExecStart=/opt/amazon-kinesis-video-streams-webrtc-sdk-c/run-kvs-webrtc-client-master-sample.sh
+ExecStart=/opt/kvs-edge-agent/run.sh
 StandardOutput=append:/var/log/kvs-edge.log
 StandardError=append:/var/log/kvs-edge.log
  

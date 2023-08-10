@@ -36,6 +36,7 @@ if [[ -z $KVS_EDGE_AGENT_S3_URI ]]; then
   exit 1
 fi 
 
+echo "downloading KVS edge agent from $KVS_EDGE_AGENT_S3_URI"
 aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
 
 ./install-aws-cli.sh
@@ -50,7 +51,7 @@ echo "generating run.sh under $(pwd)/kvs-edge-agent"
 cat > ./kvs-edge-agent/run.sh <<EOF
 #!/bin/bash
 
-export KVS_EDGE_HOME=/kvs-edge-agent/KvsEdgeComponent
+export KVS_EDGE_HOME=/opt/kvs-edge-agent/KvsEdgeComponent
 export KVS_EDGE_COMPONENT=\$KVS_EDGE_HOME/artifacts/aws.kinesisvideo.KvsEdgeComponent/1.1.0
 
 export AWS_REGION=$AWS_DEFAULT_REGION
@@ -70,7 +71,7 @@ export GST_PLUGIN_PATH=\$KVS_EDGE_COMPONENT
 
 pushd \$KVS_EDGE_COMPONENT
 
-echo "pwd: " $(pwd)
+echo "pwd: " \$(pwd)
 echo "LD_LIBRARY_PATH=\$LD_LIBRARY_PATH"
 echo "GST_PLUGIN_PATH=\$GST_PLUGIN_PATH"
 echo "AWS env vars:"
@@ -86,10 +87,9 @@ java -Daws-region=us-west-2 \
 popd
 EOF
 
-# sudo chmod 755 ./amazon-kinesis-video-streams-webrtc-sdk-c/run-kvs-webrtc-client-master-sample.sh
+chmod 755 ./kvs-edge-agent/run.sh
 
-# echo "moving amazon-kinesis-video-streams-webrtc-sdk-c to /opt/"
-# sudo cp -r $(pwd)/amazon-kinesis-video-streams-webrtc-sdk-c/* $KVS_WEBRTC_HOME
-# sudo chmod +r /opt/amazon-kinesis-video-streams-webrtc-sdk-c/iot/ -R
+echo "moving kvs-edge-agent to /opt/"
+sudo cp -r $(pwd)/kvs-edge-agent /opt/
 
-# ./install-kvs-edge-service.sh
+./install-kvs-edge-service.sh
