@@ -2,6 +2,7 @@
 iot/certs/
 iot/cmd-responses/
 iot/credential-provider-endpoint
+iot/iot-core-endpoint
 iot/role-alias
 iot/thing-name
 iot/iot-policy-document.json
