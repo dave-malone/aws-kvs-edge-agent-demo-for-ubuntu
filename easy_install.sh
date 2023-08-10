@@ -32,16 +32,9 @@ fi
 
 aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
 
-# echo "making kvs webrtc directories"
-# export KVS_WEBRTC_HOME=/opt/amazon-kinesis-video-streams-webrtc-sdk-c
-# sudo mkdir -p $KVS_WEBRTC_HOME
-
 ./install-aws-cli.sh
-./iot/provision-thing.sh
 ./build-kvs-edge.sh
-
-exit 1
-
+./provision-thing.sh
 
 # generate run-kvs-webrtc.sh using outputs from previous setps
 # echo "generating run-kvs-webrtc-client-master-sample.sh under $(pwd)/amazon-kinesis-video-streams-webrtc-sdk-c"

@@ -29,12 +29,15 @@ if aws iot describe-thing --thing-name $THING_NAME 2>&1 | grep -q 'ResourceNotFo
 fi
 
 # create AWS_IOT_ROLE_ALIAS (IAM Role, IAM Policy, IoT Role Alias, IoT Policy)
-# see https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-iot.html
+# see:
+#   * https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/gs-create-thing.html
+#   * https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/gs-create-policy.html
+#   * https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/gs-create-role-alias.html
 
 if aws iam get-role --role-name $IAM_ROLE 2>&1 | grep -q 'NoSuchEntity'; then
   echo "IAM Role $IAM_ROLE does not exist; creating now..."
   aws iam create-role --role-name $IAM_ROLE \
-    --assume-role-policy-document 'file://iam-role-document.json' > $CMD_RESULTS_DIR/iam-role.json
+    --assume-role-policy-document 'file://iot/iam-role-document.json' > $CMD_RESULTS_DIR/iam-role.json
 else
   aws iam get-role --role-name $IAM_ROLE > $CMD_RESULTS_DIR/iam-role.json
 fi
@@ -42,7 +45,7 @@ fi
 if aws iam get-role-policy --role-name $IAM_ROLE --policy-name $IAM_POLICY 2>&1 | grep -q 'NoSuchEntity'; then
   echo "IAM Role Policy $IAM_POLICY does not exist; creating now..."
   aws iam put-role-policy --role-name $IAM_ROLE \
-    --policy-name $IAM_POLICY --policy-document 'file://iam-policy-document.json'
+    --policy-name $IAM_POLICY --policy-document 'file://iot/iam-policy-document.json'
 fi
 
 if aws iot describe-role-alias --role-alias $IOT_ROLE_ALIAS 2>&1 | grep -q 'ResourceNotFoundException'; then
@@ -82,14 +85,14 @@ cat > iot-policy-document.json <<EOF
 EOF
 
   aws iot create-policy --policy-name $IOT_POLICY \
-    --policy-document 'file://iot-policy-document.json'
+    --policy-document 'file://iot/iot-policy-document.json'
 fi
 
 # create keys and certificate
 # certs to be saved in:
-# $CERTS_DIR/device.cert.pem
-# $CERTS_DIR/device.private.key
-# $CERTS_DIR/root-CA.crt
+#   $CERTS_DIR/device.cert.pem
+#   $CERTS_DIR/device.private.key
+#   $CERTS_DIR/root-CA.crt
 
 if [ ! -f "$CERTS_DIR/root-CA.crt" ]; then
   curl --silent 'https://www.amazontrust.com/repository/SFSRootCAG2.pem' \
@@ -114,5 +117,3 @@ if [ ! -f "credential-provider-endpoint" ]; then
   aws iot describe-endpoint --endpoint-type iot:CredentialProvider \
     --output text > $KVS_IOT_DIR/credential-provider-endpoint
 fi
-
-# IOT_CREDENTIAL_PROVIDER_ENDPOINT=`cat $KVS_IOT_DIR/credential-provider-endpoint`
