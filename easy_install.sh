@@ -51,15 +51,13 @@ echo "generating run.sh under $(pwd)/kvs-edge-agent"
 cat > ./kvs-edge-agent/run.sh <<EOF
 #!/bin/bash
 
-export KVS_EDGE_HOME=/opt/kvs-edge-agent/KvsEdgeComponent
-export KVS_EDGE_COMPONENT=\$KVS_EDGE_HOME/artifacts/aws.kinesisvideo.KvsEdgeComponent/1.1.0
+export KVS_EDGE_HOME=/opt/kvs-edge-agent
+export KVS_EDGE_COMPONENT=\$KVS_EDGE_HOME/KvsEdgeComponent/artifacts/aws.kinesisvideo.KvsEdgeComponent/1.1.0
 
 export AWS_REGION=$AWS_DEFAULT_REGION
 export AWS_IOT_CORE_THING_NAME=`cat $(pwd)/iot/thing-name`
-
 export AWS_IOT_CORE_DATA_ATS_ENDPOINT=`cat $(pwd)/iot/iot-core-endpoint`
 export AWS_IOT_CORE_CREDENTIAL_ENDPOINT=`cat $(pwd)/iot/credential-provider-endpoint`
-
 export AWS_IOT_CORE_ROLE_ALIAS=`cat $(pwd)/iot/role-alias`
 
 export AWS_IOT_CORE_PRIVATE_KEY=\$KVS_EDGE_HOME/iot/certs/device.private.key
@@ -77,10 +75,9 @@ echo "GST_PLUGIN_PATH=\$GST_PLUGIN_PATH"
 echo "AWS env vars:"
 env | grep AWS_
 
-java -Daws-region=us-west-2 \
-  -DisIotDevice=true \
-  -Dlog4j.configurationFile=log4j2.xml \
-  -DiotThingName=\$AWS_IOT_CORE_THING_NAME \
+java -Djava.library.path=\$KVS_EDGE_COMPONENT \
+  --add-opens java.base/jdk.internal.misc=ALL-UNNAMED \
+  -Dio.netty.tryReflectionSetAccessible=true \
   -cp kvs-edge-agent.jar:libs.jar \
   com.amazonaws.kinesisvideo.edge.controller.ControllerApp
 
