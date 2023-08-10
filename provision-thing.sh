@@ -59,28 +59,28 @@ fi
 
 if aws iot get-policy --policy-name $IOT_POLICY 2>&1 | grep -q 'ResourceNotFoundException'; then
 
-cat > iot-policy-document.json <<EOF
+cat > iot/iot-policy-document.json <<EOF
 {
-   "Version":"2012-10-17",
-   "Statement":[
-      {
-	 "Effect":"Allow",
-	 "Action":[
-	    "iot:Connect",
-      "iot:Publish",
-      "iot:Subscribe",
-      "iot:Receive"
-	 ],
-	 "Resource":"*"
- },
-      {
-	 "Effect":"Allow",
-	 "Action":[
-	    "iot:AssumeRoleWithCertificate"
-	 ],
-	 "Resource":"$(jq --raw-output '.roleAliasArn' $CMD_RESULTS_DIR/iot-role-alias.json)"
- }
-   ]
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Effect":"Allow",
+      "Action":[
+        "iot:Connect",
+        "iot:Publish",
+        "iot:Subscribe",
+        "iot:Receive"
+      ],
+      "Resource":["*"]
+    },
+    {
+      "Effect":"Allow",
+      "Action":[
+        "iot:AssumeRoleWithCertificate"
+      ],
+      "Resource":"$(jq --raw-output '.roleAliasDescription.roleAliasArn' $CMD_RESULTS_DIR/iot-role-alias.json)"
+    }
+  ]
 }
 EOF
 
@@ -116,4 +116,10 @@ fi
 if [ ! -f "credential-provider-endpoint" ]; then
   aws iot describe-endpoint --endpoint-type iot:CredentialProvider \
     --output text > $KVS_IOT_DIR/credential-provider-endpoint
+fi
+
+# get iot core data ATS endpoint
+if [ ! -f "iot-core-endpoint" ]; then
+  aws iot describe-endpoint --endpoint-type iot:Data-ATS \
+    --output text > $KVS_IOT_DIR/iot-core-endpoint
 fi
