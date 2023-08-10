@@ -25,9 +25,9 @@ sudo apt-get install -y \
   gstreamer1.0-tools
 
 
-tar -xvf kvs-edge-agent.tar.gz
+tar -xvf KvsEdgeAgent.tar.gz
 
-cd kvs-edge-agent 
+cd KvsEdgeAgent 
 mvn clean package
 
 mv ./target/libs.jar ./KvsEdgeComponent/artifacts/aws.kinesisvideo.KvsEdgeComponent/EdgeAgentVersion/

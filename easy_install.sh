@@ -6,6 +6,7 @@ if [[ -z $AWS_ACCESS_KEY_ID || -z $AWS_SECRET_ACCESS_KEY || -z $AWS_DEFAULT_REGI
 fi
 
 export THING_NAME=$1
+export KVS_EDGE_AGENT_S3_URI=$2
 
 if [[ -z $THING_NAME ]]; then
   # prompt for thing name
@@ -13,6 +14,23 @@ if [[ -z $THING_NAME ]]; then
   read THING_NAME
 fi 
 
+if [[ -z $THING_NAME ]]; then
+  echo 'THING_NAME must be set'
+  exit 1
+fi 
+
+if [[ -z $KVS_EDGE_AGENT_S3_URI ]]; then
+  # prompt for thing name
+  echo -n "Enter the S3 URI for your KVS Edge Agent package (i.e. s3://bucket-name/KvsEgeAgent1.1.0.tar.gz): "
+  read KVS_EDGE_AGENT_S3_URI
+fi 
+
+if [[ -z $KVS_EDGE_AGENT_S3_URI ]]; then
+  echo 'KVS_EDGE_AGENT_S3_URI must be set'
+  exit 1
+fi 
+
+aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
 
 # echo "making kvs webrtc directories"
 # export KVS_WEBRTC_HOME=/opt/amazon-kinesis-video-streams-webrtc-sdk-c
