@@ -46,16 +46,8 @@ if [[ -z $KVS_EDGE_AGENT_S3_URI ]]; then
   fi 
 fi
 
-echo "downloading KVS edge agent from $KVS_EDGE_AGENT_S3_URI"
-aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
-
 ./install-greengrass.sh
 ./install-aws-cli.sh
 ./add-iam-policies-to-tes-role.sh
-./install-secrets-manager-components.sh
-exit 1
-
+./install-secrets-manager-component.sh
 ./install-kvs-edge-component.sh
-
-
-

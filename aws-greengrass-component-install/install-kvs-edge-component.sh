@@ -1,7 +1,6 @@
 #!/bin/bash
 
-echo "installing Amazon Kinesis Video Streams Edge Agent build dependencies"
-echo "installing build dependencies"
+echo "installing Amazon Kinesis Video Streams Edge Agent dependencies"
 
 sudo apt-get install -y \
   jq \
@@ -18,6 +17,9 @@ sudo apt-get install -y \
   gstreamer1.0-plugins-bad \
   gstreamer1.0-plugins-good \
   gstreamer1.0-tools
+
+echo "downloading KVS edge agent from $KVS_EDGE_AGENT_S3_URI"
+aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
 
 tar -xvf KvsEdgeAgent.tar.gz
 
