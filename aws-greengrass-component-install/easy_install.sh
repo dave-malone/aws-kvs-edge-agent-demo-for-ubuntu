@@ -46,8 +46,9 @@ if [[ -z $KVS_EDGE_AGENT_S3_URI ]]; then
   fi 
 fi
 
-./install-greengrass.sh
 ./install-aws-cli.sh
+./install-gdk-cli.sh
+./install-greengrass.sh
 ./add-iam-policies-to-tes-role.sh
 ./install-secrets-manager-component.sh
 ./install-kvs-edge-component.sh

@@ -1,8 +1,7 @@
 #!/bin/bash
 
 echo "installing Amazon Kinesis Video Streams Edge Agent dependencies"
-
-sudo apt-get install -y \
+apt-get install -y \
   jq \
   zip \
   unzip \
@@ -23,7 +22,15 @@ aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
 
 tar -xvf KvsEdgeAgent.tar.gz
 
-cd kvs-edge-agent 
-mvn clean package
+KVS_EDGE_VERSION=$(cat kvs-edge-agent/KvsEdgeComponent/recipes/recipe.yaml | grep 'ComponentVersion' | sed 's+ComponentVersion: ++g')
 
-mv ./target/libs.jar ./KvsEdgeComponent/artifacts/aws.kinesisvideo.KvsEdgeComponent/1.1.0/
+pushd kvs-edge-agent 
+mvn clean package
+mv ./target/libs.jar ./KvsEdgeComponent/artifacts/aws.kinesisvideo.KvsEdgeComponent/$KVS_EDGE_VERSION/
+popd
+
+/greengrass/v2/bin/greengrass-cli deployment create \
+  --recipeDir ./kvs-edge-agent/KvsEdgeComponent/recipes/ \
+  --artifactDir ./kvs-edge-agent/KvsEdgeComponent/artifacts/ \
+  --merge "aws.kinesisvideo.KvsEdgeComponent=$KVS_EDGE_VERSION"
+

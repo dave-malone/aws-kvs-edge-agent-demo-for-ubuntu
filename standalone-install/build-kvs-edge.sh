@@ -31,7 +31,9 @@ sudo apt-get install -y \
 
 tar -xvf KvsEdgeAgent.tar.gz
 
+KVS_EDGE_VERSION=$(cat kvs-edge-agent/KvsEdgeComponent/recipes/recipe.yaml | grep 'ComponentVersion' | sed 's+ComponentVersion: ++g')
+
 cd kvs-edge-agent 
 mvn clean package
 
-mv ./target/libs.jar ./KvsEdgeComponent/artifacts/aws.kinesisvideo.KvsEdgeComponent/1.1.0/
+mv ./target/libs.jar ./KvsEdgeComponent/artifacts/aws.kinesisvideo.KvsEdgeComponent/$KVS_EDGE_VERSION/
