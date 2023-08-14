@@ -39,8 +39,10 @@ fi
 echo "downloading KVS edge agent from $KVS_EDGE_AGENT_S3_URI"
 aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
 
-./install-aws-cli.sh
+./install-greengrass.sh
 ./build-kvs-edge.sh
+exit 1
+
 ./provision-thing.sh
 
 chmod +r iot/ -R
