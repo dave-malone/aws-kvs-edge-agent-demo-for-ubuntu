@@ -12,7 +12,7 @@ fi
 
 export THING_NAME=$1
 export SECRET_ARN=$2
-export KVS_EDGE_AGENT_S3_URI=$2
+export KVS_EDGE_AGENT_S3_URI=$3
 
 if [[ -z $THING_NAME ]]; then
   # prompt for thing name
@@ -33,8 +33,6 @@ if [[ -z $SECRET_ARN ]]; then
     exit 1
   fi 
 fi 
-
-
 
 if [[ -z $KVS_EDGE_AGENT_S3_URI ]]; then
   # prompt for thing name

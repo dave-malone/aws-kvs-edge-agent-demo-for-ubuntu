@@ -6,7 +6,7 @@ if [[ -z $AWS_ACCESS_KEY_ID || -z $AWS_SECRET_ACCESS_KEY || -z $AWS_DEFAULT_REGI
 fi
 
 export SECRET_NAME=$1
-export RTSP_URL=$1
+export RTSP_URL=$2
 
 if [[ -z $SECRET_NAME ]]; then
   # prompt for secret name
