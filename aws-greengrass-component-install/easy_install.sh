@@ -5,14 +5,20 @@ if [[ $EUID -ne 0 ]]; then
     exit 2
 fi
 
-
 if [[ -z $AWS_ACCESS_KEY_ID || -z $AWS_SECRET_ACCESS_KEY || -z $AWS_DEFAULT_REGION ]]; then
   echo 'AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION must be set'
   exit 1
 fi
 
+export AWS_REGION=$AWS_DEFAULT_REGION 
 export THING_NAME=$1
 export KVS_EDGE_AGENT_S3_URI=$2
+
+if [[ -z $AWS_REGION ]]; then
+  # prompt for thing name
+  echo -n "Which AWS_REGION (i.e. us-east-1): "
+  read AWS_REGION
+fi 
 
 if [[ -z $THING_NAME ]]; then
   # prompt for thing name
@@ -40,10 +46,9 @@ echo "downloading KVS edge agent from $KVS_EDGE_AGENT_S3_URI"
 aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
 
 ./install-greengrass.sh
-./build-kvs-edge.sh
 exit 1
+./build-kvs-edge.sh
 
-./provision-thing.sh
 
 chmod +r iot/ -R
 cp -r iot/ ./kvs-edge-agent/

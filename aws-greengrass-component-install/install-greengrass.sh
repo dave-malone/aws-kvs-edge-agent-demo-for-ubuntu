@@ -21,12 +21,12 @@ unzip greengrass-nucleus-latest.zip -d GreengrassInstaller
 
 sudo -E java -Droot="/greengrass/v2" -Dlog.store=FILE \
   -jar ./GreengrassInstaller/lib/Greengrass.jar \
-  --aws-region region \
-  --thing-name MyGreengrassCore \
-  --thing-group-name MyGreengrassCoreGroup \
-  --thing-policy-name GreengrassV2IoTThingPolicy \
-  --tes-role-name GreengrassV2TokenExchangeRole \
-  --tes-role-alias-name GreengrassCoreTokenExchangeRoleAlias \
+  --aws-region $AWS_REGION \
+  --thing-name $THING_NAME \
+  --thing-group-name KvsEdgeGreengrassCoreGroup \
+  --thing-policy-name KvsEdgeGreengrassV2IoTThingPolicy \
+  --tes-role-name KvsEdgeGreengrassV2TokenExchangeRole \
+  --tes-role-alias-name KvsEdgeGreengrassCoreTokenExchangeRoleAlias \
   --component-default-user ggc_user:ggc_group \
   --provision true \
   --setup-system-service true \
