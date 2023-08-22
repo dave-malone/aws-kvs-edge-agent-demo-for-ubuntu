@@ -13,7 +13,7 @@ EOF
 jq --arg cloudsecrets "$cloud_secrets" 'del(.deploymentId, .revisionId, .iotJobId, .iotJobArn, .creationTimestamp, .isLatestForTarget, .deploymentStatus, .tags) |
 .components += {
     ("aws.greengrass.SecretManager"): { 
-        "componentVersion": "2.1.4", 
+        "componentVersion": "2.1.6", 
         ("configurationUpdate"): { 
             ("merge"): $cloudsecrets
         }
