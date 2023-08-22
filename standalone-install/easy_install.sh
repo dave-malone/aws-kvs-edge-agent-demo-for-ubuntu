@@ -46,46 +46,6 @@ aws s3 cp $KVS_EDGE_AGENT_S3_URI ./KvsEdgeAgent.tar.gz
 chmod +r iot/ -R
 cp -r iot/ ./kvs-edge-agent/
 
-# generate run-kvs-webrtc.sh using outputs from previous setps
-echo "generating run.sh under $(pwd)/kvs-edge-agent"
-cat > ./kvs-edge-agent/run.sh <<EOF
-#!/bin/bash
-
-export KVS_EDGE_HOME=/opt/kvs-edge-agent
-export KVS_EDGE_COMPONENT=\$KVS_EDGE_HOME/KvsEdgeComponent/artifacts/aws.kinesisvideo.KvsEdgeComponent/1.1.0
-
-export AWS_REGION=$AWS_DEFAULT_REGION
-export AWS_IOT_CORE_THING_NAME=`cat $(pwd)/iot/thing-name`
-export AWS_IOT_CORE_DATA_ATS_ENDPOINT=`cat $(pwd)/iot/iot-core-endpoint`
-export AWS_IOT_CORE_CREDENTIAL_ENDPOINT=`cat $(pwd)/iot/credential-provider-endpoint`
-export AWS_IOT_CORE_ROLE_ALIAS=`cat $(pwd)/iot/role-alias`
-
-export AWS_IOT_CORE_PRIVATE_KEY=\$KVS_EDGE_HOME/iot/certs/device.private.key
-export AWS_IOT_CORE_CERT=\$KVS_EDGE_HOME/iot/certs/device.cert.pem
-export AWS_IOT_CA_CERT=\$KVS_EDGE_HOME/iot/certs/root-CA.crt
-
-export LD_LIBRARY_PATH=\$KVS_EDGE_COMPONENT/lib:/usr/local/lib:/usr/local/lib64
-export GST_PLUGIN_PATH=\$KVS_EDGE_COMPONENT
-
-pushd \$KVS_EDGE_COMPONENT
-
-echo "pwd: " \$(pwd)
-echo "LD_LIBRARY_PATH=\$LD_LIBRARY_PATH"
-echo "GST_PLUGIN_PATH=\$GST_PLUGIN_PATH"
-echo "AWS env vars:"
-env | grep AWS_
-
-java -Djava.library.path=\$KVS_EDGE_COMPONENT \
-  --add-opens java.base/jdk.internal.misc=ALL-UNNAMED \
-  -Dio.netty.tryReflectionSetAccessible=true \
-  -cp kvs-edge-agent.jar:libs.jar \
-  com.amazonaws.kinesisvideo.edge.controller.ControllerApp
-
-popd
-EOF
-
-chmod 755 ./kvs-edge-agent/run.sh
-
 echo "moving kvs-edge-agent to /opt/"
 sudo cp -r $(pwd)/kvs-edge-agent /opt/
 

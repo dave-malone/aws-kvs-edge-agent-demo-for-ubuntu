@@ -92,11 +92,11 @@ fi
 # certs to be saved in:
 #   $CERTS_DIR/device.cert.pem
 #   $CERTS_DIR/device.private.key
-#   $CERTS_DIR/root-CA.crt
+#   $CERTS_DIR/root-CA.pem
 
-if [ ! -f "$CERTS_DIR/root-CA.crt" ]; then
+if [ ! -f "$CERTS_DIR/root-CA.pem" ]; then
   curl --silent 'https://www.amazontrust.com/repository/SFSRootCAG2.pem' \
-    --output $CERTS_DIR/root-CA.crt
+    --output $CERTS_DIR/root-CA.pem
 fi
 
 if [ ! -f "$CERTS_DIR/device.cert.pem" ]; then
